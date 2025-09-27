@@ -10,3 +10,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from collections import defaultdict
 
+# Configurations
+RandomState = 42
+Features = ['year', 'temp', 'humidity', 'rainfall', 'drought_code', 'buildup_index', 'day', 'month', 'wind_speed']
+Target = 'fire'
+
