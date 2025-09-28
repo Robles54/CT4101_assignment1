@@ -67,3 +67,18 @@ def load_data ():
 
 def evaluate_model(model, x_train, y_train, x_test, y_test, model_name, parameters):
     model.fit(x_train, y_train)
+
+    y_train_prediction = model.predict(x_train)
+    y_test_prediction = model.predict(x_test)
+
+    training_accuracy = accuracy_score(y_train, y_train_prediction)
+    testing_accuracy = accuracy_score(y_test, y_test_prediction)
+
+    result = {
+        'Model': model_name,
+        'Hyperparameters': str(parameters),
+        "Training Accuracy": f'{training_accuracy:.4f}',
+        'Testing Accuracy': f'{testing_accuracy:.4f}'
+    }
+
+    return result
