@@ -82,3 +82,5 @@ def evaluate_model(model, x_train, y_train, x_test, y_test, model_name, paramete
     }
 
     return result
+
+# Model Training and Hyperparameter Tuning
