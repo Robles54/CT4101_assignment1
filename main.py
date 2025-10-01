@@ -1,5 +1,6 @@
 # algorithms I've elected to use: Support Vector Machine & Logisitic Regression
 
+import os
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -84,3 +85,86 @@ def evaluate_model(model, x_train, y_train, x_test, y_test, model_name, paramete
     return result
 
 # Model Training and Hyperparameter Tuning
+def tune_svc(x_train, y_train, x_test, y_test):
+
+    #Tuning Support for SVC hyperparameters
+    results = []
+
+    #Hyperparameters for tuning
+    C_values = [0.1, 1.0, 10.0, 100.0]
+    kernal_values = ['linear', 'rbf', 'poly']
+
+    #Setting up default settings
+    default_svc = SVC(random_state=RandomState)
+    results.append(evaluate_model(default_svc, x_train, y_train, x_test, y_test, "SVC", {'C': 1.0, 'kernel': 'rbf', 'DEFAULT': True}))
+
+    #Tuning Hyperparameter 1: C
+    #using defult kernel: rbf
+    for C in C_values:
+        if C == 1.0: continue
+        svc = SVC(C=C, kernel='rbf', random_state=RandomState)
+        results.append(evaluate_model(svc, x_train, y_train, x_test, y_test, "SVC (Tuned C)", {'C': C, 'kernel': 'rbf'}))
+
+    #Tuning Hyperparameter 2: Kernel
+    #using default C: 1.0
+    for kernel in kernal_values:
+        if kernel == 'rbf': continue
+        svc = SVC(C=1.0, kernel=kernel, random_state=RandomState)
+        results.append(evaluate_model(svc, x_train, y_train, x_test, y_test, "SVC (Tuned Kernel)", {'C': 1.0, 'kernel': kernel}))
+
+    return results
+
+def tune_logistic_regression(x_train, y_train, x_test, y_test):
+    #Tuning Support for Logistic Regression (LR) hyperparameters
+    results = []
+
+    #Hyperparameters for tuning
+    C_values = [0.1, 1.0, 10.0, 100.0]
+    solver_values = ['liblinear', 'lbfgs', 'sag']
+
+    #Default Settings
+    #Default Linear Regression using C = 1.0 and solver = 'lbfgs' for binary classification
+    default_lr = LogisticRegression(random_state=RandomState, max_iter=1000)
+    results.append(evaluate_model(default_lr, x_train, y_train, x_test, y_test, "Logistic Regression", {'C': 1.0, 'solver': 'lbfgs', 'DEFAULT': True}))
+
+    #Tuning Hyperparameter 1: C (using defult solver: lbfgs)
+    for C in C_values:
+        if C == 1.0:
+            if C == 1.0: continue #Skiping default
+            lr = LogisticRegression(C=C, solver = 'lbfgs', random_state=RandomState, max_iter=1000)
+            results.append(evaluate_model(lr, x_train, y_train, x_test, y_test, "Logistic Regression (Tuned C)", {'C': C, 'solver': 'lbfgs'}))
+
+    #Tuning Hyperparameter 2: Solver (using default C: 1.0)
+    for solver in solver_values:
+        if solver == 'lbfgs': continue #Skiping default
+        
+        lr = LogisticRegression(C = 1.0, solver=solver, random_state=RandomState, max_iter=1000)
+        results.append(evaluate_model(lr, x_train, y_train, x_test, y_test, "Logistic Regression (Tuned Solver)", {'C': 1.0, 'solver': solver}))
+
+    return results
+
+#Main excution
+if __name__ == "__main__":
+    # Load and scaling data
+    x_train, y_train, x_test, y_test = load_data()
+
+    all_results = []
+
+    print("Starting SVC Tuning.....")
+    svc_results = tune_svc(x_train, y_train, x_test, y_test)
+    all_results.extend(svc_results)
+
+    print("Starting Logistic Regression Tuning.....")
+    lr_results = tune_logistic_regression(x_train, y_train, x_test, y_test)
+    all_results.extend(lr_results)
+
+    # Converting results to DataFrame for better visualization
+    results_df = pd.DataFrame(all_results)
+
+    print("\n" * 2)
+    print("=" * 60)
+    print("Wildfire CLassication Results")
+    print ("=" * 60)
+    print(results_df.to_string(index=False))
+    print ("=" * 60)
+    print("End of Program")
