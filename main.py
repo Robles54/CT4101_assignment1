@@ -165,6 +165,6 @@ if __name__ == "__main__":
     print("=" * 60)
     print("Wildfire CLassication Results")
     print ("=" * 60)
-    print(results_df.tos(index=False))
+    print(results_df.to_string(index=False))
     print ("=" * 60)
     print("End of Program")
