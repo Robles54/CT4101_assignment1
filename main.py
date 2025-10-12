@@ -130,9 +130,10 @@ def tune_logistic_regression(x_train, y_train, x_test, y_test):
     #Tuning Hyperparameter 1: C (using defult solver: lbfgs)
     for C in C_values:
         if C == 1.0:
-            if C == 1.0: continue #Skiping default
-            lr = LogisticRegression(C=C, solver = 'lbfgs', random_state=RandomState, max_iter=1000)
-            results.append(evaluate_model(lr, x_train, y_train, x_test, y_test, "Logistic Regression (Tuned C)", {'C': C, 'solver': 'lbfgs'}))
+            continue #Skiping default
+            
+        lr = LogisticRegression(C=C, solver = 'lbfgs', random_state=RandomState, max_iter=1000)
+        results.append(evaluate_model(lr, x_train, y_train, x_test, y_test, "Logistic Regression (Tuned C)", {'C': C, 'solver': 'lbfgs'}))
 
     #Tuning Hyperparameter 2: Solver (using default C: 1.0)
     for solver in solver_values:
