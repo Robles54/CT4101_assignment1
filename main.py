@@ -92,7 +92,7 @@ def tune_svc(x_train, y_train, x_test, y_test):
 
     #Hyperparameters for tuning
     C_values = [0.1, 1.0, 10.0, 100.0]
-    kernal_values = ['linear', 'rbf', 'poly']
+    kernel_values = ['linear', 'rbf', 'poly']
 
     #Setting up default settings
     default_svc = SVC(random_state=RandomState)
@@ -107,7 +107,7 @@ def tune_svc(x_train, y_train, x_test, y_test):
 
     #Tuning Hyperparameter 2: Kernel
     #using default C: 1.0
-    for kernel in kernal_values:
+    for kernel in kernel_values:
         if kernel == 'rbf': continue
         svc = SVC(C=1.0, kernel=kernel, random_state=RandomState)
         results.append(evaluate_model(svc, x_train, y_train, x_test, y_test, "SVC (Tuned Kernel)", {'C': 1.0, 'kernel': kernel}))
