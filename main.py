@@ -35,7 +35,7 @@ def load_data ():
         exit(1)
 
     # Data Successfully Loaded - Ending Loading Portion
-    print("Data loaded successfully. {len(training_data)} training samples and {len(testing_data)} testing samples.")
+    print(f"Data loaded successfully. {len(training_data)} training samples and {len(testing_data)} testing samples.")
     print("-" * 50)
 
     # Checking
@@ -67,6 +67,7 @@ def load_data ():
 
 
 def evaluate_model(model, x_train, y_train, x_test, y_test, model_name, parameters):
+    #Trains the model and calculates accuracy on both training and test sets.
     model.fit(x_train, y_train)
 
     y_train_prediction = model.predict(x_train)
@@ -130,7 +131,7 @@ def tune_logistic_regression(x_train, y_train, x_test, y_test):
     #Tuning Hyperparameter 1: C (using defult solver: lbfgs)
     for C in C_values:
         if C == 1.0:
-            continue #Skiping default
+            continue #Skipping default
             
         lr = LogisticRegression(C=C, solver = 'lbfgs', random_state=RandomState, max_iter=1000)
         results.append(evaluate_model(lr, x_train, y_train, x_test, y_test, "Logistic Regression (Tuned C)", {'C': C, 'solver': 'lbfgs'}))
